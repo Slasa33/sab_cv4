@@ -39,6 +39,7 @@ class MultiListbox(Frame, Observable):
             lb.bind('<Leave>', lambda e: 'break')
             lb.bind('<B2-Motion>', lambda e, s=self: s._b2motion(e.x, e.y))
             lb.bind('<Button-2>', lambda e, s=self: s._button2(e.x, e.y))
+            lb.bind('<Double-Button-1>', lambda e, s=self: s._select(e.y))
         frame = Frame(self); frame.pack(side=LEFT, fill=Y)
         Label(frame, borderwidth=1, relief=RAISED).pack(fill=X)
         sb = Scrollbar(frame, orient=VERTICAL, command=self._scroll)
@@ -63,7 +64,8 @@ class MultiListbox(Frame, Observable):
 
     def _scroll(self, *args):
         for l in self.lists:
-            apply(l.yview, args)
+            l.yview(*args)
+            #apply(l.yview, args)
 
     def curselection(self):
         return self.lists[0].curselection()
@@ -76,7 +78,7 @@ class MultiListbox(Frame, Observable):
         result = []
         for l in self.lists:
                 result.append(l.get(first,last))
-        if last: return apply(map, [None] + result)
+        if last: return (map, [None] + result)
         return result
 	    
     def index(self, index):
