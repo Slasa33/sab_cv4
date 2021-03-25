@@ -39,7 +39,6 @@ class MultiListbox(Frame, Observable):
             lb.bind('<Leave>', lambda e: 'break')
             lb.bind('<B2-Motion>', lambda e, s=self: s._b2motion(e.x, e.y))
             lb.bind('<Button-2>', lambda e, s=self: s._button2(e.x, e.y))
-            lb.bind('<Double-Button-1>', lambda e, s=self: s._select(e.y))
         frame = Frame(self); frame.pack(side=LEFT, fill=Y)
         Label(frame, borderwidth=1, relief=RAISED).pack(fill=X)
         sb = Scrollbar(frame, orient=VERTICAL, command=self._scroll)

@@ -22,9 +22,9 @@ def show_frame(frame):
 class MyProfile():
     def __init__(self, master):
         self.master = master 
-        frame2 = Frame(master,width=1366   , height=768  )
-        frame3 = Frame(master,width=1366   , height=768  )
-        frame1 = Frame(master, width=1366   , height=768  )
+        frame3 = Frame(master,width=1366, height=768)
+        frame1 = Frame(master, width=1366, height=768)
+        frame2 = Frame(master,width=1366, height=768)
         master.resizable(False, False)
 
         frame1.pack_propagate(0)
@@ -641,16 +641,11 @@ class MyProfile():
         self.topFrameDochazkaTOP.grid_columnconfigure(9, minsize=60)
 
 
-
-
-
-
-
-        self.mlb = table.MultiListbox(self.bottomFrame3, (('Název tréninku', 20), ('Datum', 20), ('Přítomnost hráčů', 20)))
+        self.mlb2 = table.MultiListbox(self.bottomFrame3, (('Název tréninku', 20), ('Datum', 20), ('Přítomnost hráčů', 20)))
         for i in range(len(dataDochazka)):
-            self.mlb.insert(END, (dataDochazka[i][0], dataDochazka[i][1], dataDochazka[i][2]))
-        self.mlb.pack(expand=YES,fill=BOTH, padx=10, pady=(0, 50))
-        self.mlb.subscribe(self.detail)
+            self.mlb2.insert(END, (dataDochazka[i][0], dataDochazka[i][1], dataDochazka[i][2]))
+        self.mlb2.pack(expand=YES,fill=BOTH, padx=10, pady=(0, 50))
+        self.mlb2.subscribe(self.detail)
 
 
     def detail(self, row):
@@ -668,10 +663,12 @@ class MyProfile():
         self.training_window()
 
     def training_window(self):
-        self.master.withdraw()
-        self.newWin = Toplevel(self.master)
-        DetailTrainingWindow(self.newWin, self.master, self.row)
-        self.newWin.mainloop()
+        x = messagebox.askquestion("", "Zobrazit detail tréninku?")
+        if(x == 'yes'):
+            self.master.withdraw()
+            self.newWin = Toplevel(self.master)
+            DetailTrainingWindow(self.newWin, self.master, self.row)
+            self.newWin.mainloop()
 
 
     def edit(self):
@@ -697,15 +694,6 @@ class MyProfile():
         self.delkaT.delete(1.0, END) 
         self.noteT.delete(1.0, END)
 
-    
-    #Kliknutim na radek v listboxu vyskoci dialog s tim, jestli chceme dany zaznam opravdu vymazat
-
-    def _delete(self, row):
-        self.row=row
-        x = messagebox.askquestion("", "Vážně chcete odstranit záznam?")
-        if(x == 'yes'):
-            self.mlb.delete(self.row)
-            data.pop(self.row) 
 
 
 class DetailWindow():
@@ -732,20 +720,88 @@ class DetailTrainingWindow():
         self.old_window = old_window
         self.master = master
         self.row = row
-        fram = Frame(self.master, width=500, height=750)
+        fram = Frame(self.master, width=1000, height=750)
         self.master.resizable(False, False)
         fram.pack()
         fram.pack_propagate(0)
 
-        self.topFrame = Frame(fram)
-        self.topFrame.pack(side="top",fill=X)
-        # self.placeL = Label(self.topFrame, text="Místo:", padx=10, pady=3)
-        # self.placeL.grid(column=0, row=0)
+        self.leftoFrame = Frame(fram)
+        self.leftoFrame.pack(side="left", fill=BOTH)
 
-        self.confirm_button = Button(self.topFrame, text='CONFIRM', bg='green',command = self.confirm_user,width=12,height=3)
-        self.confirm_button.pack(pady=40)
+        self.leftoFrameBottom = Frame(self.leftoFrame)
+        self.leftoFrameBottom.grid(row=24,column=0)
 
-    def confirm_user(self):
+        self.rightoFrame = Frame(fram)
+        self.rightoFrame.pack(side="right",fill=BOTH)
+
+        self.photo = PhotoImage(file="han01.png")
+        self.artwork = Label(self.rightoFrame, image=self.photo)
+        self.artwork.photo = self.photo
+        self.artwork.pack(padx=30, pady=(20,30))
+
+        self.photo = PhotoImage(file="han02.png")
+        self.artwork = Label(self.rightoFrame, image=self.photo)
+        self.artwork.photo = self.photo
+        self.artwork.pack(padx=30, pady=(10,30))
+
+
+        self.druh = Label(self.leftoFrame, font=('arial',14,'bold'), text='Druh tréninku', fg='blue',padx=2, pady=2, width=15)
+        self.druh.grid(row=0, column=0, pady=(10,0))
+
+        self.druh1 = Label(self.leftoFrame, font=('arial',12), text='Herní',padx=2, pady=2, width=15)
+        self.druh1.grid(row=2, column=0)
+
+        self.cil = Label(self.leftoFrame, font=('arial',14,'bold'), text='Cíl tréninku', fg='blue',padx=2, pady=2, width=15)
+        self.cil.grid(row=4, column=0)
+
+        self.cil1 = Label(self.leftoFrame, font=('arial',12), text='Nácvik útoku',padx=2, pady=2, width=20)
+        self.cil1.grid(row=6, column=0)
+
+        self.nacini = Label(self.leftoFrame, font=('arial',14,'bold'), text='Co přinést', fg='blue',padx=2, pady=2, width=15)
+        self.nacini.grid(row=8, column=0)
+
+        self.nacini1 = Label(self.leftoFrame, font=('arial',12), text='Balóny, dresy',padx=2, pady=2, width=15)
+        self.nacini1.grid(row=10, column=0)
+
+
+        self.popis = Label(self.leftoFrame, font=('arial',14,'bold'), text='Popis tréninku', fg='blue', pady=2, width=15)
+        self.popis.grid(row=12, column=0)
+
+        var = StringVar()
+        self.popis1 = Message(self.leftoFrame, font=('arial',12), textvariable=var, width=500)
+        self.popis1.grid(row=14, column=0, rowspan=4, columnspan=4, padx=(50,0))
+
+        var.set("Hřiště je rozděleno podle nákresu. Situace je taková, že jsme v útoku. Akce začíná u střeďáka, který zvedne roku. Přihraje pravé spojce a běží dělat clonu pro ní. Spojka uvolní křídlo a to střílí.")
+
+        self.delka = Label(self.leftoFrame, font=('arial',14, 'bold'), text='Délka a trvání', padx=2, fg='blue', pady=2, width=15)
+        self.delka.grid(row=20, column=0)
+
+        self.delka1 = Label(self.leftoFrame, font=('arial',12), text='60 minut, střídání útoků co 5 minut',padx=2, pady=2, width=25)
+        self.delka1.grid(row=22, column=0)
+
+
+        self.upravit = Button(self.leftoFrameBottom, text="Upravit", bg='orange',width=15, height=4)
+        self.upravit.grid(row=0, column=0, padx=(30,0))
+
+        self.zavrit = Button(self.leftoFrameBottom, text="Zavřít", bg='green',width=15, height=4, command=self.closewind)
+        self.zavrit.grid(row=0, column=2)
+
+
+        #self.leftoFrame.grid_rowconfigure(1, minsize=30)
+        self.leftoFrame.grid_rowconfigure(3, minsize=30)
+        #self.leftoFrame.grid_rowconfigure(5, minsize=30)
+        self.leftoFrame.grid_rowconfigure(7, minsize=30)
+        self.leftoFrame.grid_rowconfigure(11, minsize=30)
+        self.leftoFrame.grid_rowconfigure(15, minsize=30)
+        self.leftoFrame.grid_rowconfigure(19, minsize=30)
+        self.leftoFrame.grid_rowconfigure(23, minsize=100)
+
+        self.leftoFrameBottom.grid_columnconfigure(1, minsize=20)
+
+        # self.confirm_button = Button(self.leftoFrame, text='CONFIRM', bg='green',command = self.confirm_user,width=12,height=3)
+        # self.confirm_button.pack(pady=40)
+
+    def closewind(self):
         self.old_window.deiconify() 
         self.master.withdraw()
 
