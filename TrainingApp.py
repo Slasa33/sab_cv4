@@ -10,6 +10,11 @@ from tkinter.font import Font
 data = [
        ["Posilování", "2000","Hala", "21.3.2021", "Bartoń", "60 min", "Přinést činky"]]
 
+dataDochazka = [
+    ["Posilování", "1.3.2021", "16"], 
+    ["Činky", "3.3.2021", "16"], 
+    ["Pět na Pět", "5.3.2021", "14"], 
+    ["Hala", "7.3.2021", "15"]]
 
 def show_frame(frame):
     frame.tkraise()
@@ -310,7 +315,7 @@ class MyProfile():
         for i in range(len(data)):
             self.mlb.insert(END, (data[i][0], data[i][1],data[i][2], data[i][3], data[i][4], data[i][5], data[i][6]))
         self.mlb.pack(expand=YES,fill=BOTH, padx=10, pady=10)
-        self.mlb.subscribe( lambda row: self._delete( row ) )
+        self.mlb.subscribe( lambda row: self.trainingDetail( row ) )
 
 
         #===================================== Frame 3 code =====================================#
@@ -329,6 +334,10 @@ class MyProfile():
         self.leftTop.pack(side="top", padx=5, fill=BOTH, expand=1)
         self.leftMid.pack(fill=BOTH, expand=1, padx=5)
         self.leftBottom.pack(side="bottom", padx=5, fill=BOTH, expand=1)
+
+
+        self.bottomFrame3 = Frame(frame3)
+        self.bottomFrame3.pack(side="bottom")
 
         boldfontButton = Font(font='Helvetica 12 bold')
 
@@ -499,6 +508,8 @@ class MyProfile():
         self.buttonons = Button(self.topFrameDochazka, text="Uložit", width=15, height=4, font=boldFont)
         self.buttonons.grid(row=8, column=10, rowspan=3, padx=(60,0))
 
+        
+
         self.hrac9_cislo = Label(self.topFrameDochazka, font=('arial',10,'bold'), text='9', padx=2, pady=2, bd=2, width=15)
         self.hrac9_cislo.grid(row=9, column=1, sticky=W)
         self.hrac9_jmeno = Label(self.topFrameDochazka, font=('arial',10,'bold'), text='Tibor Kulík', padx=2, pady=2, bd=2, width=15)
@@ -619,9 +630,6 @@ class MyProfile():
         self.hrac16_notes= Text(self.topFrameDochazka, padx=2, pady=2, bd=2, width=15, height=1)
         self.hrac16_notes.grid(row=16, column=8)
 
-        
-
-
 
         self.topFrameDochazka.grid_columnconfigure(3, minsize=60)
         self.topFrameDochazka.grid_columnconfigure(5, minsize=85)
@@ -632,13 +640,17 @@ class MyProfile():
         self.topFrameDochazkaTOP.grid_columnconfigure(7, minsize=100)
         self.topFrameDochazkaTOP.grid_columnconfigure(9, minsize=60)
 
-        # self.mlb = table.MultiListbox(self.topFrameDochazka, (('Název tréninku', 20), ('Datum', 20)))
-        # for i in range(len(data)):
-        #     self.mlb.insert(END, (data[i][0], data[i][1]))
-        # self.mlb.pack(expand=YES,fill=BOTH, padx=10, pady=10)
-        # self.mlb.subscribe(self.detail)
 
 
+
+
+
+
+        self.mlb = table.MultiListbox(self.bottomFrame3, (('Název tréninku', 20), ('Datum', 20), ('Přítomnost hráčů', 20)))
+        for i in range(len(dataDochazka)):
+            self.mlb.insert(END, (dataDochazka[i][0], dataDochazka[i][1], dataDochazka[i][2]))
+        self.mlb.pack(expand=YES,fill=BOTH, padx=10, pady=(0, 50))
+        self.mlb.subscribe(self.detail)
 
 
     def detail(self, row):
@@ -650,6 +662,16 @@ class MyProfile():
         self.newWindow = Toplevel(self.master)
         DetailWindow(self.newWindow, self.master, self.row)
         self.newWindow.mainloop()
+
+    def trainingDetail(self, row):
+        self.row = row
+        self.training_window()
+
+    def training_window(self):
+        self.master.withdraw()
+        self.newWin = Toplevel(self.master)
+        DetailTrainingWindow(self.newWin, self.master, self.row)
+        self.newWin.mainloop()
 
 
     def edit(self):
@@ -703,6 +725,30 @@ class DetailWindow():
     def confirm_user(self):
         self.old_window.deiconify() 
         self.master.withdraw()
+
+
+class DetailTrainingWindow():
+    def __init__(self, master, old_window, row):
+        self.old_window = old_window
+        self.master = master
+        self.row = row
+        fram = Frame(self.master, width=500, height=750)
+        self.master.resizable(False, False)
+        fram.pack()
+        fram.pack_propagate(0)
+
+        self.topFrame = Frame(fram)
+        self.topFrame.pack(side="top",fill=X)
+        # self.placeL = Label(self.topFrame, text="Místo:", padx=10, pady=3)
+        # self.placeL.grid(column=0, row=0)
+
+        self.confirm_button = Button(self.topFrame, text='CONFIRM', bg='green',command = self.confirm_user,width=12,height=3)
+        self.confirm_button.pack(pady=40)
+
+    def confirm_user(self):
+        self.old_window.deiconify() 
+        self.master.withdraw()
+
 
 
     
