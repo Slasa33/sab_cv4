@@ -8,7 +8,8 @@ from PIL import Image, ImageTk
 from tkinter.font import Font
 
 data = [
-       ["Posilování", "2000","Hala", "21.3.2021", "Bartoń", "60 min", "Přinést činky"]]
+       ["Posilování", "2000","Hala", "21.3.2021", "Bartoń", "60 min", "Přinést činky"],
+       ["Herní", "2000","Hala", "14.3.2021", "Bartoń", "60 min", "Dresy a kužely"]]
 
 dataDochazka = [
     ["Posilování", "1.3.2021", "16"], 
@@ -999,86 +1000,100 @@ class DetailTrainingWindow():
         self.old_window = old_window
         self.master = master
         self.row = row
-        fram = Frame(self.master, width=1000, height=750)
+        self.fram = Frame(self.master, width=1000, height=500)
         self.master.resizable(False, False)
-        fram.pack()
-        fram.pack_propagate(0)
+        self.fram.pack()
+        self.fram.pack_propagate(0)
 
-        self.leftoFrame = Frame(fram)
-        self.leftoFrame.pack(side="left", fill=BOTH)
 
-        self.leftoFrameBottom = Frame(self.leftoFrame)
-        self.leftoFrameBottom.grid(row=24,column=0)
+        self.topFrame = Frame(self.fram)
+        self.topFrame.pack(side="top", fill=BOTH, pady=10)
 
-        self.rightoFrame = Frame(fram)
-        self.rightoFrame.pack(side="right",fill=BOTH)
+        self.midframe = Frame(self.fram)
+        self.midframe.pack(fill=X, pady=(50,0))
+
+        self.bottomF = Frame(self.fram)
+        self.bottomF.pack(side="bottom", fill=BOTH)
+
+        self.bottomLeft = Frame(self.bottomF)
+        self.bottomLeft.pack(side="left")
+
+        self.bottomRight = Frame(self.bottomF)
+        self.bottomRight.pack(fill=BOTH)
+
+        self.inside = Frame(self.bottomRight)
+        self.inside.pack(side="bottom",pady=50)
+        
+
+
+        #INFORMACE JMENO-NAZEV
+
+        self.nameL = Label(self.topFrame, text="Název:", padx=10, pady=3, font=("Arial", 16))
+        self.nameL.grid(column = 0, row = 0)
+        self.nameT = Text(self.topFrame, width=15, height=1)
+        self.nameT.grid(column=1, row=0)
+        self.titleL = Label(self.topFrame, text="Ročník:", padx=10, pady=3, font=("Arial", 16))
+        self.titleL.grid(column = 0, row=1)
+        self.titleT = Text(self.topFrame, width=15, height=1)
+        self.titleT.grid(column=1, row=1)
+
+
+        #INFORMACE ZBYTKOVE
+
+        self.placeL = Label(self.topFrame, text="Místo:", padx=10, pady=3, font=("Arial", 16))
+        self.placeL.grid(column=2, row=0)
+        self.placeT = Text(self.topFrame, width=15, height=1)
+        self.placeT.grid(column=3, row=0)
+        
+        self.dateL = Label(self.topFrame, text="Datum:", padx=10, pady=3, font=("Arial", 16))
+        self.dateL.grid(column=2, row=1)
+        self.dateT = Text(self.topFrame, width=15, height=1)
+        self.dateT.grid(column=3, row=1)
+
+        self.delkaL = Label(self.topFrame, padx=10, pady=3, font=("Arial", 16))
+        self.delkaL.grid(column=4, row=0)
+        self.delkaT = Label(self.topFrame, width=5, height=1)
+        self.delkaT.grid(column=5, row=0)
+
+
+        self.noteL = Label(self.topFrame, text="Poznámky:", padx=10, pady=3, font=("Arial", 16))
+        self.noteL.grid(column=6, row=0)
+        self.noteT = Text(self.topFrame, width=35, height=5)
+        self.noteT.grid(column=7, row=0, columnspan=6, rowspan=3)
+
+        self.textos = Label(self.midframe, text="HCB - Útoky, 3v3, 4v4, 5v5, obrana", fg="blue",padx=10, pady=3, font=("Arial", 16))
+        self.textos.pack(side="left")
+
+        self.placeT.insert(END, 'Hala házené')
+        self.nameT.insert(END, 'Herní trénink')
+        self.titleT.insert(END, '2000')
+        self.dateT.insert(END, '14.3.2021')
+        self.noteT.insert(END, 'Nezapomeňte přinést dresy a kužely')
 
         self.photo = PhotoImage(file="han01.png")
-        self.artwork = Label(self.rightoFrame, image=self.photo)
+        self.artwork = Label(self.bottomLeft, image=self.photo)
         self.artwork.photo = self.photo
-        self.artwork.pack(padx=30, pady=(20,30))
-
-        self.photo = PhotoImage(file="han02.png")
-        self.artwork = Label(self.rightoFrame, image=self.photo)
-        self.artwork.photo = self.photo
-        self.artwork.pack(padx=30, pady=(10,30))
+        self.artwork.pack(padx=10, pady=(20,30))
 
 
-        self.druh = Label(self.leftoFrame, font=('arial',14,'bold'), text='Druh tréninku', fg='blue',padx=2, pady=2, width=15)
-        self.druh.grid(row=0, column=0, pady=(10,0))
+        boldfontButton = Font(font='Helvetica 12 bold')
+    
+        self.Cil = Label(self.bottomRight, text="Cíl tréninku", padx=10, pady=3, fg="blue",font=("Arial", 16))
+        self.Cil.pack()
+        
+        a = Label(self.bottomRight, text="#Útok - Hry 5 na 5 se zaměřením na akce",pady=3, font=("Arial", 14))
+        a.pack()
 
-        self.druh1 = Label(self.leftoFrame, font=('arial',12), text='Herní',padx=2, pady=2, width=15)
-        self.druh1.grid(row=2, column=0)
-
-        self.cil = Label(self.leftoFrame, font=('arial',14,'bold'), text='Cíl tréninku', fg='blue',padx=2, pady=2, width=15)
-        self.cil.grid(row=4, column=0)
-
-        self.cil1 = Label(self.leftoFrame, font=('arial',12), text='Nácvik útoku',padx=2, pady=2, width=20)
-        self.cil1.grid(row=6, column=0)
-
-        self.nacini = Label(self.leftoFrame, font=('arial',14,'bold'), text='Co přinést', fg='blue',padx=2, pady=2, width=15)
-        self.nacini.grid(row=8, column=0)
-
-        self.nacini1 = Label(self.leftoFrame, font=('arial',12), text='Balóny, dresy',padx=2, pady=2, width=15)
-        self.nacini1.grid(row=10, column=0)
+        b = Label(self.bottomRight, text="#Obrana - Osobka, 3 na 3 obrana rychlých útoků", pady=3, font=("Arial", 14))
+        b.pack()
 
 
-        self.popis = Label(self.leftoFrame, font=('arial',14,'bold'), text='Popis tréninku', fg='blue', pady=2, width=15)
-        self.popis.grid(row=12, column=0)
+        self.upravit = Button(self.inside, text="Upravit", bg='orange',font=boldfontButton, width=15, height=4)
+        self.upravit.grid(row=0, column=0, padx=(0,20))
 
-        var = StringVar()
-        self.popis1 = Message(self.leftoFrame, font=('arial',12), textvariable=var, width=500)
-        self.popis1.grid(row=14, column=0, rowspan=4, columnspan=4, padx=(50,0))
+        self.zavrit = Button(self.inside, text="Zavřít", bg='green',font=boldfontButton, width=15, height=4, command=self.closewind)
+        self.zavrit.grid(row=0, column=1, padx=(20,0))
 
-        var.set("Hřiště je rozděleno podle nákresu. Situace je taková, že jsme v útoku. Akce začíná u střeďáka, který zvedne roku. Přihraje pravé spojce a běží dělat clonu pro ní. Spojka uvolní křídlo a to střílí.")
-
-        self.delka = Label(self.leftoFrame, font=('arial',14, 'bold'), text='Délka a trvání', padx=2, fg='blue', pady=2, width=15)
-        self.delka.grid(row=20, column=0)
-
-        self.delka1 = Label(self.leftoFrame, font=('arial',12), text='60 minut, střídání útoků co 5 minut',padx=2, pady=2, width=25)
-        self.delka1.grid(row=22, column=0)
-
-
-        self.upravit = Button(self.leftoFrameBottom, text="Upravit", bg='orange',width=15, height=4)
-        self.upravit.grid(row=0, column=0, padx=(30,0))
-
-        self.zavrit = Button(self.leftoFrameBottom, text="Zavřít", bg='green',width=15, height=4, command=self.closewind)
-        self.zavrit.grid(row=0, column=2)
-
-
-        #self.leftoFrame.grid_rowconfigure(1, minsize=30)
-        self.leftoFrame.grid_rowconfigure(3, minsize=30)
-        #self.leftoFrame.grid_rowconfigure(5, minsize=30)
-        self.leftoFrame.grid_rowconfigure(7, minsize=30)
-        self.leftoFrame.grid_rowconfigure(11, minsize=30)
-        self.leftoFrame.grid_rowconfigure(15, minsize=30)
-        self.leftoFrame.grid_rowconfigure(19, minsize=30)
-        self.leftoFrame.grid_rowconfigure(23, minsize=100)
-
-        self.leftoFrameBottom.grid_columnconfigure(1, minsize=20)
-
-        # self.confirm_button = Button(self.leftoFrame, text='CONFIRM', bg='green',command = self.confirm_user,width=12,height=3)
-        # self.confirm_button.pack(pady=40)
 
     def closewind(self):
         self.old_window.deiconify() 
